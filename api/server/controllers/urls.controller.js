@@ -1,38 +1,35 @@
 'use strict';
 
-const { UrlsRepository } = require('../repositories');
+const { UrlsRepository, UsersRepository } = require('../repositories');
+const {JwtService } = require('../services');
 
 class UrlsController {
 
     constructor() { }
 
     list(req, res) {
-        let user = req.params.userId;
+        let user = verify(req);
+        if (!user) return res.status(401).send({ error: 'Unauthorized' });
+
         return UrlsRepository.findAllByUserId(user)
             .then(urls => res.status(200).send(urls))
             .catch((error) => res.status(400).send({ error: "Error processing your request" }));
     }
 
     create(req, res) {
+        let user = verify(req);
+        if (!user) return res.status(401).send({ error: 'Unauthorized' });
+
         let url = req.body;
-        let random_string = Math.random().toString(32).substring(2, 5) + Math.random().toString(32).substring(2, 5);
-        url.short = url.short ? url.short : random_string;
+        let randomString = randomizeUrl();
+        url.short = url.short ? url.short : randomString;
+        url.userId = user;
         url.clicked = 0;
 
         return UrlsRepository.save(url)
             .then((url) => UrlsRepository.findById(url.dataValues.id))
             .then((url) => res.status(201).send(url))
             .catch((error) => res.status(400).send({ error: `Error creating new URL ${error}` }));
-    }
-
-    exists(req, res) {
-        const id = req.params.short;
-        return UrlsRepository.exists(short)
-            .then((count) => {
-                if (count > 0) return res.status(204).send();
-                else throw err;
-            })
-            .catch((error) => res.status(404).send({ error: 'User id not found' }));
     }
 
     find(req, res) {
@@ -45,11 +42,45 @@ class UrlsController {
     stats(req, res) {
         const short = req.params.short;
         return UrlsRepository.findOne(short)
-            .then((url) => res.status(200).send(url))
-            .catch((error) => res.status(404).send({ error: `Url with id ${short}`}));
+            .then((url) => {   
+                    let user = verify(req);
+                    if (user == url.userId) return res.status(200).send(url);
+                    else return res.status(401).send({error: 'Unauthorized'});
+            })
+            .catch((error) => res.status(404).send({ error: `Url with id ${short} not found`}));
     }
 
+    update(req, res) {
+        let user = verify(req);
+        if (!user) return res.status(401).send({ error: 'Unauthorized' });
 
+        const url = req.body;
+        const short = url.short;
+        const newShort = url.newShort;
+
+        return UrlsRepository.update(short, newShort, user)
+                .then(url => res.status(200).send(url))
+                .catch((error) => res.status(404).send({ error: error }));
+    }
+
+}
+
+function randomizeUrl() {
+    const allCapsAlpha = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ']; 
+    const allLowerAlpha = [...'abcdefghijklmnopqrstuvwxyz']; 
+    const allNumbers = [...'0123456789'];
+
+    const base = [...allCapsAlpha, ...allLowerAlpha, ...allNumbers];
+
+    return Array.from({length: 6}, () => base[Math.floor(Math.random() * base.length)]).join('');
+}
+
+function verify(req) {
+    const bearer = req.header('Authorization') || '';
+    const token = bearer.split(' ')[1];
+    const valid = JwtService.verify(token);
+
+    return valid.user;
 }
 
 module.exports = new UrlsController();
