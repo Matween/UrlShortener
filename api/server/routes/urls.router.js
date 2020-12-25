@@ -7,11 +7,9 @@ const { UrlsController } = require('../controllers');
 const { JwtMiddleware } = require('../middleware');
 
 UrlsRouter.route('/')
-  .post(JwtMiddleware.verify, UrlsController.create);
-UrlsRouter.route('/user/:userId')
+  .post(JwtMiddleware.verify, UrlsController.create)
+  .patch(JwtMiddleware.verify, UrlsController.update);
+UrlsRouter.route('/user')
 .get(JwtMiddleware.verify, UrlsController.list)
-  UrlsRouter.route('/:id')
-  .head(JwtMiddleware.verify, UrlsController.exists)
-  .get(JwtMiddleware.verify, UrlsController.find);
 
 module.exports = UrlsRouter;

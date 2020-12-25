@@ -25,12 +25,19 @@ class UrlsRepository {
     });
   }
 
-  updateClicked(short) {
-    const url = Url.update({clicked: Sequelize.literal('clicked + 1'), lastAccess: new Date()}, {
+  update(short, newShort, userId) {
+    return Url.update({short: newShort}, {
       returning: true,
-      where: {
-        short: short
-      }
+      where: { short: short, userId: userId }
+    })
+    .then(() => Url.findOne({ where: { short: newShort, userId: userId }}))
+    .catch((error) => new Promise((resolve, reject) => reject(error)));
+  }
+
+  updateClicked(short) {
+    Url.update({clicked: Sequelize.literal('clicked + 1'), lastAccess: new Date()}, {
+      returning: true,
+      where: { short: short }
     });
     return Url.findOne({
         where: { short: short }
