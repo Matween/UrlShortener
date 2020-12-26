@@ -8,7 +8,7 @@ const { JwtMiddleware } = require('../middleware');
 
 UsersRouter.route('/')
   .get(JwtMiddleware.hasRole('ADMIN'), UsersController.list)
-  .post(JwtMiddleware.hasRole('ADMIN'), UsersController.create);
+  .post(UsersController.create);
 
 UsersRouter.route('/:id')
   .head(JwtMiddleware.hasRole('ADMIN'), UsersController.exists)
