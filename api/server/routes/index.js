@@ -10,8 +10,8 @@ const ShortRouter = require('./short.router');
 const { JwtMiddleware } = require('../middleware');
 
 Router.use('/auth', AuthenticationRouter);
-Router.use('/users', JwtMiddleware.verify, UsersRouter);
-Router.use('/url', JwtMiddleware.verify, UrlsRouter)
+Router.use('/users', UsersRouter);
+Router.use('/urls', JwtMiddleware.verify, UrlsRouter)
 
 Router.use('/', ShortRouter);
 
