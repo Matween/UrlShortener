@@ -8,7 +8,7 @@ class UrlsController {
     constructor() { }
 
     list(req, res) {
-        let user = verify(req);
+        const user = verify(req);
         if (!user) return res.status(401).send({ error: 'Unauthorized' });
 
         return UrlsRepository.findAllByUserId(user)
@@ -17,10 +17,12 @@ class UrlsController {
     }
 
     create(req, res) {
-        let user = verify(req);
+        const user = verify(req);
         if (!user) return res.status(401).send({ error: 'Unauthorized' });
 
-        let url = req.body;
+        const url = req.body;
+        if (url.short && url.short.length < 4) return res.status(400).send({ error: 'Short must be at least 4 characters long. Or let the server generate one for you.'});
+
         let randomString = randomizeUrl();
         url.short = url.short ? url.short : randomString;
         url.userId = user;
@@ -43,7 +45,7 @@ class UrlsController {
         const short = req.params.short;
         return UrlsRepository.findOne(short)
             .then((url) => {   
-                    let user = verify(req);
+                    const user = verify(req);
                     if (user == url.userId) return res.status(200).send(url);
                     else return res.status(401).send({error: 'Unauthorized'});
             })
@@ -51,12 +53,15 @@ class UrlsController {
     }
 
     update(req, res) {
-        let user = verify(req);
+        const user = verify(req);
         if (!user) return res.status(401).send({ error: 'Unauthorized' });
 
         const url = req.body;
         const short = url.short;
         const newShort = url.newShort;
+
+        if (!short || !newShort) return res.status(400).send({ error: 'Please provide short and new short link.'});
+        if (newShort.length < 4) return res.status(400).send({ error: 'Short must be at least 4 characters long.'});
 
         return UrlsRepository.update(short, newShort, user)
                 .then(url => res.status(200).send(url))
