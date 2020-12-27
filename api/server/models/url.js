@@ -1,8 +1,5 @@
 'use strict';
-const { foreign_key } = require('inflection');
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Url extends Model {
     /**
@@ -15,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Url.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
     url: DataTypes.TEXT,
     short: {
       type: DataTypes.STRING,

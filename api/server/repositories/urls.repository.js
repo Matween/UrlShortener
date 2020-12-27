@@ -26,12 +26,9 @@ class UrlsRepository {
   }
 
   update(short, newShort, userId) {
-    return Url.update({short: newShort}, {
-      returning: true,
+    return Url.findOne({
       where: { short: short, userId: userId }
-    })
-    .then(() => Url.findOne({ where: { short: newShort, userId: userId }}))
-    .catch((error) => new Promise((resolve, reject) => reject(error)));
+    }).then(url => url.update({short: newShort}));
   }
 
   updateClicked(short) {

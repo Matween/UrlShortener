@@ -8,12 +8,6 @@ class UsersRepository {
 
   findAll() {
     return User.findAll({
-      include: [{
-        model: Role,
-        as: 'roles',
-        attributes: ['role'],
-        through: { attributes: [] }
-      }],
       attributes: {
         exclude: ['id', 'password']
       }
@@ -22,12 +16,6 @@ class UsersRepository {
 
   findById(id) {
     return User.findByPk(id, {
-      include: [{
-        model: Role,
-        as: 'roles',
-        attributes: ['role'],
-        through: { attributes: [] }
-      }],
       attributes: {
         exclude: ['id', 'password']
       }
@@ -37,10 +25,6 @@ class UsersRepository {
   findOne(username) {
     return User.findOne({
       where: { username: username },
-      include: [{
-        model: Role, as: 'roles', attributes: ['role'],
-        through: { attributes: [] }
-      }]
     });
   }
 
