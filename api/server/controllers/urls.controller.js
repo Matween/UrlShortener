@@ -61,9 +61,10 @@ class UrlsController {
         const newShort = url.newShort;
 
         if (!short || !newShort) return res.status(400).send({ error: 'Please provide short and new short link.'});
-        if (newShort.length < 4) return res.status(400).send({ error: 'Short must be at least 4 characters long.'});
+        if (newShort.length < 4) return res.status(400).send({ error: 'New short must be at least 4 characters long.'});
 
         return UrlsRepository.update(short, newShort, user)
+                .then(() => UrlsRepository.findOne(newShort))
                 .then(url => res.status(200).send(url))
                 .catch((error) => res.status(404).send({ error: error }));
     }

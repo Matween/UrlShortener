@@ -26,7 +26,7 @@ class AuthenticationController {
     return Promise.all([user, valid])
       .then(([user, valid]) => {
         if(valid) {
-          let payload = { user: user.dataValues.id, name: user.dataValues.username, roles: user.dataValues.roles};
+          let payload = { user: user.dataValues.id, name: user.dataValues.username};
           return res.status(200).send({ token: JwtService.sign(payload) });
         } else {
           throw err;
