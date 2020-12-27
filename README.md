@@ -30,14 +30,13 @@ localhost:3002/:short_url
 ### How to use
 Use with Postman or Insomnia.
 
-#### Create a user
 | Path | Method | Params | Description |
 | - | - | - | - |
 | `/auth` | `POST` | `username, password` | Authenticate user, returns JWT token.  Jwt token can the be place in `Authorization` header prefixed with `Bearer`|
 | `/users` | `POST` | `username, password` | Create new user |
 | `/urls` | `POST` | `url, short(optional)` | Create new url, must provide JWT |
 | `/urls` | `PATCH` | `short, newShort` | Update a url, must provide JWT |
-| `/urls/user` | `GET` | | Update a url, must provide JWT |
+| `/urls/user` | `GET` | | User's saved urls, must provide JWT |
 | `/:short` | `GET` | :short = url that a server returned | Redirect to the actual link|
 | `/:short/stats` | `GET` | :short = url that a server returned | Link statistics |
 
