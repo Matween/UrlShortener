@@ -6,6 +6,12 @@
     "viewDir": "./views",
     "staticDir": "./public"
   },
-  "test": {},
+  "test": {
+    "env": "test",
+    "hostname": "localhost",
+    "port": "3003",
+    "viewDir": "./views",
+    "staticDir": "./public"
+  },
   "production": {}
 }
