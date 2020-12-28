@@ -13,7 +13,7 @@ localhost:3002/:short_url
     - http://travistidwell.com/jsencrypt/demo/
 2. Change directory to `api` and Install dependencies with `npm install`.
 3. Run migrations and seed the Sqlite database with `npm migrate` and `npm seed`. Don't forget to install `sequelize-cli` globally using `npm install -g sequelize-cli`
-4. Run the project with `node index.js`.
+4. Run the project with `npm start`.
 
 ### Tests
 1. Run `npm run pretest` and `npm run pretest:seed` !!! IMPORTANT, otherwise the tests will fail
