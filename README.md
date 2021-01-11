@@ -12,8 +12,8 @@ localhost:3002/:short_url
 1. Generate RSA256 public private keys and place them in the `config` folder with file names `public.key` and `private.key`.
     - http://travistidwell.com/jsencrypt/demo/
 2. Change directory to `api` and Install dependencies with `npm install`.
-3. Run migrations and seed that Sqlite database with `npm migrate` and `npm seed`. Don't forget to install `sequelize` globally using `npm install -g sequelize`
-4. Run the project with `node index.js`.
+3. Run migrations and seed the Sqlite database with `npm migrate` and `npm seed`. Don't forget to install `sequelize-cli` globally using `npm install -g sequelize-cli`
+4. Run the project with `npm start`.
 
 ### Tests
 1. Run `npm run pretest` and `npm run pretest:seed` !!! IMPORTANT, otherwise the tests will fail
@@ -32,7 +32,7 @@ Use with Postman or Insomnia.
 
 | Path | Method | Params | Description |
 | - | - | - | - |
-| `/auth` | `POST` | `username, password` | Authenticate user, returns JWT token.  Jwt token can the be place in `Authorization` header prefixed with `Bearer`|
+| `/auth` | `POST` | `username, password` | Authenticate user, returns JWT token.  Jwt token can then be placed in `Authorization` header prefixed with `Bearer`|
 | `/users` | `POST` | `username, password` | Create new user |
 | `/urls` | `POST` | `url, short(optional)` | Create new url, must provide JWT |
 | `/urls` | `PATCH` | `short, newShort` | Update a url, must provide JWT |
